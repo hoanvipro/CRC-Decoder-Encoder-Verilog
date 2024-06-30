@@ -1,0 +1,28 @@
+Command line:
+   CRC_4_DE_isim_beh.exe
+     -simmode  gui
+     -simrunnum  0
+     -socket  52882
+
+Tue Oct 11 09:40:28 2022
+
+
+ Elaboration Time: 0.140625 sec
+
+ Current Memory Usage: 5809.64 Meg
+
+ Total Signals          : 20
+ Total Nets             : 45
+ Total Signal Drivers   : 8
+ Total Blocks           : 2
+ Total Primitive Blocks : 2
+ Total Processes        : 11
+ Total Traceable Variables  : 24
+ Total Scalar Nets and Variables : 150
+
+ Total Simulation Time: 0.171875 sec
+
+ Current Memory Usage: 5809.64 Meg
+
+Tue Oct 11 09:40:35 2022
+

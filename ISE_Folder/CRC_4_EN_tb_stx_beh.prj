@@ -1,0 +1,3 @@
+verilog isim_temp "CRC_4_EN.v"
+verilog isim_temp "CRC_4_EN_tb.v"
+verilog isim_temp "C:/Xilinx/14.7/ISE_DS/ISE//verilog/src/glbl.v"

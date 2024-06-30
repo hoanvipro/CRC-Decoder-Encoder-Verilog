@@ -1,0 +1,1 @@
+-intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -o "C:/Hoan/hoc tap/TKHTVMTH/CRC_4/CRC_4_DE_isim_beh.exe" -prj "C:/Hoan/hoc tap/TKHTVMTH/CRC_4/CRC_4_DE_beh.prj" "work.CRC_4_DE" "work.glbl" 

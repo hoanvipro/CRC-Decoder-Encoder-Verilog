@@ -1,4 +1,4 @@
-module crc_encoder (
+module crcencoder (
   clk,
   resetn,
   ctrlen,
@@ -7,8 +7,8 @@ module crc_encoder (
   crcSeq,
   crcready);
   
-  parameter DATAWIDTH = 4'd10;
-  parameter CRCWIDTH  = 4'd4;
+  parameter DATAWIDTH = 8'd32;
+  parameter CRCWIDTH  = 8'd16;
   
   //Input
   input clk;
@@ -23,7 +23,7 @@ module crc_encoder (
   //Status
   reg  calStatus;
   wire crcMaxcounter;
-  reg  [3:0] crccounter;
+  reg  [8:0] crccounter;
   
   //Reg data
   reg [CRCWIDTH - 1:0]           crcSeqreg;
@@ -60,9 +60,9 @@ module crc_encoder (
   
   always@(posedge clk) begin
     if(~resetn)
-      crccounter <= 4'b0;
+      crccounter <= 8'b0;
     else if(crcMaxcounter)
-      crccounter <= 4'b0;
+      crccounter <= 8'b0;
     else if(calStatus)
       crccounter <= crccounter + 1'b1;
     else 

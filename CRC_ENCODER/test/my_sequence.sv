@@ -1,7 +1,7 @@
 //Transaction
 class myTransaction extends uvm_sequence_item;
-  rand logic [9:0] datain;
-  rand logic [4:0] genPoly;
+  rand logic [DATAWIDTH - 1:0] datain;
+  rand logic [CRCWIDTH:0] genPoly;
   //Register to factory
   `uvm_object_utils_begin(myTransaction)
     `uvm_field_int(datain, UVM_ALL_ON)
@@ -26,6 +26,8 @@ class mySequencer extends uvm_sequencer#(myTransaction);
 	endfunction
   
 endclass: mySequencer
+
+
 //Sequence
 class mySequence extends uvm_sequence#(myTransaction);
   //Register to factory
@@ -56,7 +58,100 @@ class mySequence extends uvm_sequence#(myTransaction);
   endtask: body
   
 endclass: mySequence
-      
+
+
+// Virtual p_sequencer
+class virtual_sequencer extends uvm_sequencer;
+  `uvm_component_utils(virtual_sequencer)
+  mySequencer seqr_A;
+  mySequencer seqr_B;
+
+  function new(string name = "virtual_sequencer", uvm_component parent = null);
+    super.new(name, parent);
+  endfunction
+endclass 
+
+
+
+// Virtual sequence
+// class virtual_seq extends uvm_sequence #(myTransaction);
+//   mySequence Aseq;
+//   mySequence Bseq;  
   
+//   mySequencer seqr_A;
+//   mySequencer seqr_B;
+//   `uvm_object_utils(virtual_seq)
+//   `uvm_declare_p_sequencer(virtual_sequencer)
+  
+//   function new (string name = "virtual_seq");
+//     super.new(name);
+//   endfunction
+  
+//   task body();
+//     `uvm_info(get_type_name(), "virtual_seq: Inside Body", UVM_LOW);
+//     Aseq = mySequence::type_id::create("Aseq");
+//     Bseq = mySequence::type_id::create("Bseq");
+//     fork
+//         Aseq.start(p_sequencer.seqr_A);
+//         Bseq.start(p_sequencer.seqr_B);
+//     join
+//   endtask
+// endclass
+
+class virtual_seq extends uvm_sequence #(myTransaction);
+//   mySequence Aseq;
+//   mySequence Bseq;  
+  
+  mySequencer seqr_A;
+  mySequencer seqr_B;
+  
+  myTransaction vme_txn1;
+  myTransaction vme_txn2;
+  
+  `uvm_object_utils(virtual_seq)
+  `uvm_declare_p_sequencer(virtual_sequencer)
+  
+  function new (string name = "virtual_seq");
+    super.new(name);
+  endfunction
+  
+  task body();
+`uvm_info(get_type_name(), "virtual_seq: Inside Body", UVM_LOW);
+    repeat(NUM_TEST)    
+      begin
+    vme_txn1 = myTransaction::type_id::create( .name( "vme_txn1" ) );
+    vme_txn2 = myTransaction::type_id::create( .name( "vme_txn2" ) );
+    
+    if (!vme_txn1.randomize())
+      `uvm_error("RNDERR", "Can't randomize transaction");
+    
+    vme_txn2.copy(vme_txn1);
+
+    vme_txn1.set_sequencer(p_sequencer.seqr_A);
+    vme_txn2.set_sequencer(p_sequencer.seqr_B);
+    
+
+//     Aseq = mySequence::type_id::create("Aseq");
+//     Bseq = mySequence::type_id::create("Bseq");
+//     fork
+//         Aseq.start(p_sequencer.seqr_A);
+//         Bseq.start(p_sequencer.seqr_B);
+//     join
+
+        fork
+          begin
+            start_item(vme_txn1);
+            finish_item(vme_txn1);
+          end
+          begin
+            start_item(vme_txn2);
+            finish_item(vme_txn2);
+          end
+        join
+       
+     end
+  endtask
+endclass
+
 
 
